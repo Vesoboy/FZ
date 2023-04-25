@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Page";
+}
+
+<h1>Log Control</h1>
+
+<form asp-controller="Home" method="post">
+    <button type="button" id="start" class="btn btn-sm btn-warning active" data-action="start" asp-action="start">Запустить фоновую задачу!</button>
+    <button type="button" id="stop" class="btn bth-sm btn-dark" data-action="stop" asp-action="stop">Остановить фоновую задачу!</button>
+    <button type="button" id="stop" class="btn bth-sm btn-dark" asp-action="stoped">вызвать ошибку фоновую задачу!</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        // Handle button click events
+        $('button[data-action]').click(function () {
+            // Disable current active button
+            $('button.active').removeClass('active').prop('disabled', false);
+            // Enable clicked button and mark it as active
+            $(this).addClass('active').prop('disabled', true);
+            // Call the corresponding controller action
+            var action = $(this).data('action');
+            $.post('/home/' + action);
+        });
+    });
+</script>
