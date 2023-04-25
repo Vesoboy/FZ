@@ -3,10 +3,12 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using FZ.Controllers;
-using FZ.FZSite;
+using FZ.Bot;
 using FZ.WriteLogs;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Telegram.Bot;
+using Telegram.Bot.Types;
 using static NLog.LayoutRenderers.Wrappers.ReplaceLayoutRendererWrapper;
 
 namespace FZ.CheckFZ
@@ -16,6 +18,7 @@ namespace FZ.CheckFZ
         private readonly string _siteUrl;
         private readonly ILogger<OneLogger> _logger;
         private int _restartAttempts;
+        public int error;
 
         public CheckSite(string siteUrl, ILogger<OneLogger> logger)
         {
@@ -24,7 +27,7 @@ namespace FZ.CheckFZ
             _restartAttempts = 0;
         }
 
-        public async Task CheckSiteAsync(CancellationToken cancelToken)
+        public async Task CheckSiteAsync()
         {
             using (var httpClient = new HttpClient())
             {
@@ -69,9 +72,13 @@ namespace FZ.CheckFZ
 
                             // SОтправьте электронное письмо администратору
                             // (замените свой собственный код отправки электронной почты)
-                            var message = "Сайт не удалось перезапустить после 5 попыток. Пожалуйста, вручную перезапустите сайт.";
-                            _ = EmailService.SendEmailAsync("vessolair@gmail.com", "Сайт мониторинг", message);
 
+                            var message = "Сайт не удалось перезапустить после 5 попыток. Пожалуйста, вручную перезапустите сайт.";
+                            var sendTelegram = new SendMessage();
+                            await sendTelegram.SendMessageAsync(message);
+
+                            _logger.LogWarning("Фоновая задача была остаовлена связи с проблемами на сайте");
+                            error = 1;
                         }
                     }
                     else _logger.LogInformation("Сайт работает корректно.");
@@ -82,6 +89,7 @@ namespace FZ.CheckFZ
                     _logger.LogError($"Исключение произошло при попытке доступа к сайту. Сообщение об исключении: {ex.Message}");
                 }
             }
+            
         }
     }
 }

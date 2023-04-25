@@ -20,7 +20,7 @@ namespace FZ.WriteLogs
         {
             _logger = logger;
             IsRunning = false;
-            _checkSite = new CheckSite ("https://localhost:44315/", _logger);
+            _checkSite = new CheckSite ("https://localhost:44315/sddsc", _logger);
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -29,8 +29,8 @@ namespace FZ.WriteLogs
                 IsRunning = true;
                 
                 // Check the site
-                await _checkSite.CheckSiteAsync(stoppingToken);
-
+                await _checkSite.CheckSiteAsync();
+                if (_checkSite.error == 1) StopAsync(stoppingToken);
                 await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
             }
             IsRunning = false;
