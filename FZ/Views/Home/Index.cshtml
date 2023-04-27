@@ -1,28 +1,98 @@
-﻿@{
+﻿@model IEnumerable<FZ.WriteLogs.DataBaseSite>
+@{
     ViewData["Title"] = "Page";
 }
 
 <h1>Log Control</h1>
 
 <form asp-controller="Home" method="post">
-    <button type="button" id="start" class="btn btn-sm btn-warning active" data-action="start" asp-action="start">Запустить фоновую задачу!</button>
-    <button type="button" id="stop" class="btn bth-sm btn-dark" data-action="stop" asp-action="stop">Остановить фоновую задачу!</button>
-    <button type="button" id="stop" class="btn bth-sm btn-dark" asp-action="stoped">вызвать ошибку фоновую задачу!</button>
+    <button type="button" id="start" class="btn btn-success active" data-action="start" asp-action="start">Запустить фоновую задачу!</button>
+    <button type="button" id="stop" class="btn btn-danger" data-action="stop" asp-action="stop">Полностью остановить фоновую задачу!</button>
 </form>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
-    $(document).ready(function () {
-        // Handle button click events
-        $('button[data-action]').click(function () {
-            // Disable current active button
-            $('button.active').removeClass('active').prop('disabled', false);
-            // Enable clicked button and mark it as active
-            $(this).addClass('active').prop('disabled', true);
-            // Call the corresponding controller action
-            var action = $(this).data('action');
-            $.post('/home/' + action);
-        });
-    });
+	$(document).ready(function () {
+		// Handle button click events
+		$('button[data-action]').click(function () {
+			// Disable current active button
+			$('button.active').removeClass('active').prop('disabled', false);
+			// Enable clicked button and mark it as active
+			$(this).addClass('active').prop('disabled', true);
+			// Call the corresponding controller action
+			var action = $(this).data('action');
+			$.post('/home/' + action);
+		});
+	});
 </script>
+
+<h4>Все cайты отслеживаемые ФЗ</h4>
+<a type="button" asp-action="AddSite" class="btn btn-light">Добавить сайт</a>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">URL</th>
+            <th scope="col">Кому отправляется log</th>
+            <th scope="col">Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.url</td>
+                <td>@item.message</td>
+                <td>
+                    <a type="button" asp-action="Edit" asp-controller="Home" class="btn btn-light" asp-route-id="@item.Id">Изменить</a>
+                    <a type="button" asp-action="Delete" asp-controller="Home" class="btn btn-light" asp-route-id="@item.Id">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+@*<div class="input-group mb-3">
+    <div class ="input-group-text">
+        @foreach (DataBaseSite entity in Model)
+        {
+            <div>
+                @entity.url
+                |
+                <a asp-controller="Home" asp-action="ArticlesEdit" class="btn btn-outline-secondary" asp-route-id="@entity.Id">редактировать</a>
+                |
+                <form method="post" asp-controller="Home" asp-action="ArticlesDelete">
+                    <input class="btn btn-outline-secondary" type="hidden" value="@entity.Id" name="Id" />
+                    <input class="btn btn-outline-secondary" type="submit" value="удалить" />
+                </form>
+            </div>
+        }
+    </div>
+</div>*@
+
+
+
+@*<div class="input-group mb-3">
+    <form asp-action="Edit">
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          ФЗ<input type="checkbox" aria-label="Checkbox for following text input">
+        </div>
+      </div>
+
+        <h3 class="input-group-text">Url сайта:</h3>
+        <input type="text" class="input-group-text" name="urlName" aria-label="Text input with checkbox">
+
+        <h3 class="input-group-text">Кому отправлять log:</h3>
+        <input type="text" class="input-group-text" name="whoName" aria-label="Text input with checkbox">
+    
+        <div class="input-group-text">
+            <button class="btn btn-outline-secondary" type="button">Сохранить</button>
+        </div>
+    </form>
+</div>*@
+
+
+

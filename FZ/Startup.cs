@@ -1,9 +1,11 @@
-//using FZ.FZSite;
 using FZ.CheckFZ;
+using FZ.DB;
 using FZ.WriteLogs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,9 +29,17 @@ namespace FZ
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddSingleton<OneLogger>();
-            //services.AddSingleton<CheckSite>();
-            //services.AddHostedService<SiteMonitorService>();
+            //services.AddSingleton<OneLogger>();
+            services.AddHttpClient();
+            //services.AddHostedService<SiteMonitor>();
+            //services.AddSingleton<SiteMonitor>();
+            //services.AddScoped<IHostedService, SiteMonitor>();
+            services.AddDbContext<DataContext>(options => options.UseNpgsql(Configuration.GetConnectionString("MvcMovieContext")), ServiceLifetime.Singleton);
+            services.AddSingleton<FZ.CheckFZ.SiteMonitor>();
+            //services.AddDbContext<DataContext>(options =>
+            //    options.UseNpgsql(Configuration.GetConnectionString("MvcMovieContext")));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
