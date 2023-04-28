@@ -10,13 +10,16 @@ namespace FZ.WriteLogs
 
         [Required]
         [Display(Name = "Название сайта")]
-        public string url { get; set; }
+        public string Url { get; set; }
 
         [Display(Name = "Количество перезапуска")]
         public int RetryCount { get; set; }
 
         [Required]
         [Display(Name = "Кому отправлять логи")]
-        public string message { get; set; }
+        public string Message { get; set; }
+
+		[Display(Name = "Активность отслеживания")]
+		public bool Active { get; set; }
     }
 }

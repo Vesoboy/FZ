@@ -1,0 +1,32 @@
+﻿@model FZ.WriteLogs.DataBaseSite
+
+<form asp-action="deleteModal" asp-controller="home" method="post">
+<button type="button" class="btn btn-light" data-toggle="modal" data-target="#delModal-@Model.Id">
+    Удалить
+</button>
+
+
+    <div class="modal fade" id="delModal-@Model.Id" tabindex="-1" role="dialog" aria-labelledby="delModalLabel-@Model.Id" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delModalLabel-@Model.Id">Удалить</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <p>Вы уверены что ходите удалить сайт?</p>
+                <div class="form-group">
+                    <label asp-for="Url" class="control-label">Url</label>
+                    <input type="text" asp-for="Url" class="form-control" readonly />
+                </div>
+                <input asp-for="Id" class="d-none" />
+
+            </div>
+            <div class="modal-footer">
+                <input type="submit" value="Да" class="btn btn-light" />
+            </div>
+        </div>
+    </div>
+</div>
+</form>

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FZ.Migrations
 {
-    public partial class postgresql_migration_717 : Migration
+    public partial class postgresql_migration_695 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,9 +12,10 @@ namespace FZ.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    url = table.Column<string>(type: "text", nullable: false),
+                    Url = table.Column<string>(type: "text", nullable: false),
                     RetryCount = table.Column<int>(type: "integer", nullable: false),
-                    message = table.Column<string>(type: "text", nullable: false)
+                    Message = table.Column<string>(type: "text", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -23,8 +24,8 @@ namespace FZ.Migrations
 
             migrationBuilder.InsertData(
                 table: "Site",
-                columns: new[] { "Id", "RetryCount", "message", "url" },
-                values: new object[] { new Guid("99a76a1a-2370-470c-9510-85b42cce4472"), 0, "root", "root" });
+                columns: new[] { "Id", "Active", "Message", "RetryCount", "Url" },
+                values: new object[] { new Guid("547db874-e087-47eb-99de-e2bf05c05b4a"), true, "root", 0, "root" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

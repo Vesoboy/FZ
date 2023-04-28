@@ -30,9 +30,10 @@ namespace FZ.DB
                 b.HasData(new DataBaseSite
                 {
                     Id = rootGuid,
-                    url = "root",
+                    Url = "root",
                     RetryCount = 0,
-                    message = "root",
+                    Message = "root",
+                    Active= true,
                 });
             });
 

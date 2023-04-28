@@ -1,0 +1,50 @@
+﻿@model FZ.WriteLogs.DataBaseSite
+
+<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addModal">
+    Добавить сайт
+</button>
+
+
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form asp-action="AddSiteModal" asp-controller="home" method="post">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="addModalLabel">Modal Title</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label asp-for="Url" class="control-label">Url</label>
+                        <input type="text" asp-for="Url" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Message" class="control-label">Кому отправлять log</label>
+                        <input type="text" asp-for="Message" class="form-control" />
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" value="Добавить" class="btn btn-light" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@*
+
+<form asp-action="AddSite" asp-controller="home">
+    <div class="form-group">
+        <label asp-for="url" class="control-label">Url</label>
+        <input type="text" asp-for="url" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="message" class="control-label">Кому отправлять log</label>
+        <input type="text" asp-for="message" class="form-control" />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Сохранить" class="btn btn-default" />
+    </div>
+</form>*@

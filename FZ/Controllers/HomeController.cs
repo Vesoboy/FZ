@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Policy;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
@@ -44,42 +46,33 @@ namespace FZ.Controllers
             return new EmptyResult();
         }
 
-        public IActionResult AddSite()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddSite(DataBaseSite site)
+        public IActionResult AddSiteModal(DataBaseSite site)
         {
             db.Site.Add(site);
-            await db.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-
-        public IActionResult Edit(Guid id)
-        {
-            var site = db.Site.FirstOrDefault(p => p.Id == id);
-            if (site != null)
-                return View(site);
-
-            return NotFound();
-        }
-
-        [HttpPost]
-        public IActionResult Edit (DataBaseSite site)
-        {
-            db.Update(site);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(Guid id)
+        public IActionResult EditModal (DataBaseSite site)
         {
-            var site = db.Site.FirstOrDefault(p => p.Id == id);
-            if (site != null)
+            var editSite = db.Site.FirstOrDefault(r => r.Id == site.Id);
+            if (editSite != null)
             {
-                db.Site.Remove(site);
+                editSite.Url = site.Url;
+                editSite.Message = site.Message;
+            }
+            db.Site.Update(editSite);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult DeleteModal (DataBaseSite site)
+        {
+            var delSite = db.Site.FirstOrDefault(p => p.Id == site.Id);
+            if (delSite != null)
+            {
+                db.Site.Remove(delSite);
                 db.SaveChanges();
             }
             return RedirectToAction("Index");

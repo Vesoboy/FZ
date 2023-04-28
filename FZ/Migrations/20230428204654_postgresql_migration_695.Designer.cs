@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FZ.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230426222927_postgresql_migration_717")]
-    partial class postgresql_migration_717
+    [Migration("20230428204654_postgresql_migration_695")]
+    partial class postgresql_migration_695
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,14 +27,17 @@ namespace FZ.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("RetryCount")
-                        .HasColumnType("integer");
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
 
-                    b.Property<string>("message")
+                    b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("url")
+                    b.Property<int>("RetryCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -45,10 +48,11 @@ namespace FZ.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("99a76a1a-2370-470c-9510-85b42cce4472"),
+                            Id = new Guid("547db874-e087-47eb-99de-e2bf05c05b4a"),
+                            Active = true,
+                            Message = "root",
                             RetryCount = 0,
-                            message = "root",
-                            url = "root"
+                            Url = "root"
                         });
                 });
 #pragma warning restore 612, 618
