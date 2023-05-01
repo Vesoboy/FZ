@@ -1,7 +1,6 @@
 ﻿using FZ.CheckFZ;
 using FZ.DB;
 using FZ.Models;
-using FZ.WriteLogs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,10 +22,11 @@ namespace FZ.Controllers
         private DataContext db;
         public ILogger<SiteMonitor> Logger { get; }
 
-        public HomeController(SiteMonitor hosted, DataContext context)
+        public HomeController(SiteMonitor hosted, DataContext context, ILogger<SiteMonitor> logger)
         {
             _hosted = hosted;
             db = context;
+            Logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -73,6 +73,31 @@ namespace FZ.Controllers
             if (delSite != null)
             {
                 db.Site.Remove(delSite);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult ActiveTrue(DataBaseSite site)
+        {
+            var siteTrue = db.Site.FirstOrDefault(p => p.Id == site.Id);
+            if (siteTrue != null)
+            {
+                siteTrue.Active = true;
+                siteTrue.RetryCount = 0;
+                Logger.LogInformation ($"Сайт {site.Url} был запущен вручную, связь в телеграм {site.Message}");
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult ActiveFalse(DataBaseSite site)
+        {
+            var siteFalse = db.Site.FirstOrDefault(p => p.Id == site.Id);
+            if (siteFalse != null)
+            {
+                siteFalse.Active = false;
+                Logger.LogInformation($"Сайт {site.Url} был остановлен вручную, связь в телеграм {site.Message}");
                 db.SaveChanges();
             }
             return RedirectToAction("Index");

@@ -1,5 +1,5 @@
 ﻿using FZ.DB;
-using FZ.WriteLogs;
+using FZ.Models;
 using System;
 using System.Threading.Tasks;
 using Telegram.Bot;

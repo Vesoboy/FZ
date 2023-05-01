@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace FZ.WriteLogs
+namespace FZ.Models
 {
     public class DataBaseSite
     {
@@ -19,7 +19,7 @@ namespace FZ.WriteLogs
         [Display(Name = "Кому отправлять логи")]
         public string Message { get; set; }
 
-		[Display(Name = "Активность отслеживания")]
-		public bool Active { get; set; }
+        [Display(Name = "Активность отслеживания")]
+        public bool Active { get; set; }
     }
 }

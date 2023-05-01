@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using FZ.WriteLogs;
 using System;
+using FZ.Models;
 
 namespace FZ.DB
 {

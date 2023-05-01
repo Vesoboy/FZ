@@ -1,7 +1,7 @@
-﻿@model FZ.WriteLogs.DataBaseSite
+﻿@model DataBaseSite
 
 <form asp-action="deleteModal" asp-controller="home" method="post">
-<button type="button" class="btn btn-light" data-toggle="modal" data-target="#delModal-@Model.Id">
+    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#delModal-@Model.Id">
     Удалить
 </button>
 

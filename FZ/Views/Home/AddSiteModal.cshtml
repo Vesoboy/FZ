@@ -1,6 +1,6 @@
-﻿@model FZ.WriteLogs.DataBaseSite
+﻿@model DataBaseSite
 
-<button type="button" class="btn btn-light" data-toggle="modal" data-target="#addModal">
+<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addModal">
     Добавить сайт
 </button>
 
@@ -23,7 +23,10 @@
                         <label asp-for="Message" class="control-label">Кому отправлять log</label>
                         <input type="text" asp-for="Message" class="form-control" />
                     </div>
-
+                    <div class="form-group">
+                        <label asp-for="Active" class="control-label">Добавить сайт в ФЗ</label>
+                        <input type="checkbox" asp-for="Active" class="form-control" />
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <input type="submit" value="Добавить" class="btn btn-light" />
@@ -32,19 +35,3 @@
         </div>
     </div>
 </div>
-
-@*
-
-<form asp-action="AddSite" asp-controller="home">
-    <div class="form-group">
-        <label asp-for="url" class="control-label">Url</label>
-        <input type="text" asp-for="url" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="message" class="control-label">Кому отправлять log</label>
-        <input type="text" asp-for="message" class="form-control" />
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Сохранить" class="btn btn-default" />
-    </div>
-</form>*@

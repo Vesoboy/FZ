@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FZ.WriteLogs.DataBaseSite>
+﻿@model IEnumerable<DataBaseSite>
 @{
     ViewData["Title"] = "Page";
 }
@@ -32,8 +32,10 @@
 <table class="table">
     <thead class="thead-dark">
         <tr>
+            <th scope="col">Активность сайта</th>
+            <th scope="col">T/F</th>
             <th scope="col">URL</th>
-            <th scope="col">Кому отправляется log</th>
+            <th scope="col">Кого оповещать о log</th>
             <th scope="col">Действие</th>
         </tr>
     </thead>
@@ -41,11 +43,29 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Url</td>
-                <td>@item.Message</td>
-				<td>
-					<a> @await Html.PartialAsync("EditModal",item)     </a>
-					<a> @await Html.PartialAsync("DeleteModal",item)     </a>
+                <td>
+					<div class="row justify-content-start">
+                        <div class="col-5">
+							@await Html.PartialAsync("ActiveTrue",item)
+                        </div>
+                        <div class="col-5">
+							@await Html.PartialAsync("ActiveFalse",item)
+                        </div>
+                    </div>
+					
+                </td>
+                <td class="align-middle">@item.Active</td>
+                <td class="align-middle">@item.Url</td>
+                <td class="align-middle">@item.Message</td>
+                <td class="align-middle">
+                    <div class="row justify-content-start">
+                        <div class="col-5">
+                            @await Html.PartialAsync("EditModal",item)
+                        </div>
+                        <div class="col-5">
+                            @await Html.PartialAsync("DeleteModal",item)
+                        </div>
+                    </div>
 				</td>
             </tr>
         }

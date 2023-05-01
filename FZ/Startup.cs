@@ -1,6 +1,6 @@
 using FZ.CheckFZ;
 using FZ.DB;
-using FZ.WriteLogs;
+using FZ.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;

@@ -30,9 +30,9 @@ namespace FZ.CheckFZ
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var delSite = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DelSite");
-            Directory.CreateDirectory(delSite);
-            var fileSiteDel = Path.Combine(delSite, $"Удаленные сайты {DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss")}.txt");
+            var disactivSite = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DisActive");
+            Directory.CreateDirectory(disactivSite);
+            var fileSiteDel = Path.Combine(disactivSite, $"Отключенные сайты {DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss")}.txt");
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -49,7 +49,7 @@ namespace FZ.CheckFZ
                             HttpResponseMessage response = await httpClient.GetAsync(site.Url, stoppingToken);
 
 
-                            if (!response.IsSuccessStatusCode)
+                            if (!response.IsSuccessStatusCode && site.Active)
                             {
                                 _logger.LogError($"Сайт {site.Url} не доступен. StatusCode={response.StatusCode}");
 
@@ -59,7 +59,7 @@ namespace FZ.CheckFZ
                                 var filePath = Path.Combine(folderPath, $"{DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss")}.txt");
                                 await File.WriteAllTextAsync(filePath, $"Сайт {site.Url} не доступен. StatusCode={response.StatusCode}");
 
-                                if (site.RetryCount < 4)
+                                if (site.RetryCount < 2)
                                 {
                                     site.RetryCount++;
 
@@ -72,26 +72,24 @@ namespace FZ.CheckFZ
                                     await _context.SaveChangesAsync(stoppingToken);
                                 }
 
-                                else 
+                                else
                                 {
                                     _logger.LogWarning($"Сайт {site.Url} не перезагрузился после {site.RetryCount} попыток. Уведомить в телеграмме {site.Message}");
                                     var message = $"Сайт {site.Url} не удалось перезапустить после {site.RetryCount} попыток. Пожалуйста, вручную перезапустите сайт.";
                                     var sendTelegram = new SendMessage();
                                     await sendTelegram.SendMessageAsync(message, site.Message);
 
-                                    await File.AppendAllTextAsync(fileSiteDel, $"Сайт {site.Url} удален. Контакт для связи {site.Message}. StatusCode={response.StatusCode}\n");
-                                    
-                                    _context.Remove(site);
+                                    await File.AppendAllTextAsync(fileSiteDel, $"Сайт {site.Url} отключен от ФЗ. Контакт для связи {site.Message}. StatusCode={response.StatusCode}\n");
+                                    site.Active = false;
+                                    _context.Update(site);
                                     _context.SaveChanges();
-                                    //await _context.SaveChangesAsync(stoppingToken);
+                                    await _context.SaveChangesAsync(stoppingToken);
                                 }
 
                             }
-
-                            else
+                            else if (site.Active)
                             {
                                 _logger.LogInformation($"Сайт {site.Url} работает коректно.");
-
                                 if (site.RetryCount > 0)
                                 {
                                     site.RetryCount = 0;
@@ -102,6 +100,7 @@ namespace FZ.CheckFZ
                                     await _context.SaveChangesAsync(stoppingToken);
                                 }
                             }
+                            //else continue;
                         }
                     }
                     catch (Exception ex)
